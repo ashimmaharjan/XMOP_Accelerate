@@ -1,8 +1,10 @@
+import Login from "./auth/login/page";
+
 export default function Home() {
   return (
     <main>
       <div>
-        <h2>Dashboard</h2>
+        <Login />
       </div>
     </main>
   );
