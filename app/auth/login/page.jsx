@@ -15,7 +15,7 @@ const Login = () => {
         <div className="w-auto h-auto relative bg-zinc-50 p-12 rounded-2xl border-2 border-gray-300 shadow-lg">
           <XmopsLogo />
 
-          <h2 className="font-extrabold text-4xl text-sky-700 flex items-center gap-1">
+          <h2 className="font-bold text-4xl text-sky-700 flex items-center gap-1">
             Welcome Back
             <Lottie
               animationData={handWaveAnimation}
@@ -55,14 +55,14 @@ const Login = () => {
 
           <Divider />
 
-          <p className="text-gray-500 flex">
-            Don&apos;t have an account?
+          <div className="flex">
+            <span className="text-gray-500">Don&apos;t have an account?</span>
             <Link href="/auth/signup" className="font-bold ml-1 text-sky-500">
-              <p className="flex hover:transform hover:-translate-y-1 transition-all duration-300 ease-in-out">
+              <p className="hover:transform hover:-translate-y-1 hover:underline transition-all duration-300 ease-in-out">
                 Create now.
               </p>
             </Link>
-          </p>
+          </div>
         </div>
       </section>
     </main>

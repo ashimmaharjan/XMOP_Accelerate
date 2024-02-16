@@ -8,6 +8,7 @@ const InputFields = ({ label, inputType, placeholder }) => {
         type={inputType}
         className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
         placeholder={placeholder}
+        required
       />
     </div>
   );
