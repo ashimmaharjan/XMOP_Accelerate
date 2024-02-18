@@ -1,14 +1,20 @@
 "use client";
 
 import Divider from "@/app/components/Divider";
-import { MdWavingHand } from "react-icons/md";
 import Link from "next/link";
 import InputFields from "@/app/components/InputFields";
 import XmopsLogo from "@/app/components/XmopsLogo";
 import Lottie from "lottie-react";
 import handWaveAnimation from "../../../animations/handWave.json";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
+
+  const handleLogin = () => {
+    router.push("/dashboard");
+  };
+
   return (
     <main>
       <section className="flex justify-center items-center w-full h-screen">
@@ -48,7 +54,10 @@ const Login = () => {
               Forgot Password?
             </Link>
 
-            <button className="bg-sky-600 p-3 text-white mt-3 rounded-3xl shadow-md font-semibold hover:bg-sky-800 hover:shadow-xl transition-all duration-300 ease-in-out">
+            <button
+              onClick={handleLogin}
+              className="bg-sky-600 p-3 text-white mt-3 rounded-3xl shadow-md font-semibold hover:bg-sky-800 hover:shadow-xl transition-all duration-300 ease-in-out"
+            >
               Login
             </button>
           </form>

@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { MdDashboard, MdManageHistory } from "react-icons/md";
-import { AiOutlineDeploymentUnit } from "react-icons/ai";
 import { IoIosLogOut } from "react-icons/io";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const NavDrawer = () => {
-  const [activeLink, setActiveLink] = useState("Dashboard");
+  const [activeLink, setActiveLink] = useState("/dashboard");
   const NavLinks = [
     {
       id: 1,
@@ -18,15 +18,8 @@ const NavDrawer = () => {
     },
     {
       id: 2,
-      label: "Deployment",
-      link: "/deployment",
-      active: false,
-      icon: <AiOutlineDeploymentUnit />,
-    },
-    {
-      id: 3,
       label: "History",
-      link: "/history",
+      link: "/dashboard/history",
       active: false,
       icon: <MdManageHistory />,
     },
@@ -34,6 +27,12 @@ const NavDrawer = () => {
 
   const handleLinkClick = (link) => {
     setActiveLink(link);
+  };
+
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    router.push("/");
   };
 
   return (
@@ -45,13 +44,13 @@ const NavDrawer = () => {
         {NavLinks.map((navLink) => (
           <Link
             key={navLink.id}
-            href=""
+            href={navLink.link}
             className={`text-lg flex items-center p-2 w-full rounded-tl-2xl gap-1 hover:translate-x-3 transition-all duration-300 ease-in-out ${
-              activeLink === navLink.label
-                ? "bg-white text-sky-500 font-semibold"
+              activeLink === navLink.link
+                ? "bg-white text-sky-600 font-semibold"
                 : "text-white"
             }`}
-            onClick={() => handleLinkClick(navLink.label)}
+            onClick={() => handleLinkClick(navLink.link)}
           >
             {navLink.icon}
             <p>{navLink.label}</p>
@@ -59,7 +58,10 @@ const NavDrawer = () => {
         ))}
       </div>
 
-      <button className="flex gap-2 p-3 ml-6 items-center mt-auto font-semibold border border-r-0 text-white hover:shadow-xl hover:border-2 hover:border-r-0 hover:bg-red-600 transition-colors ease-in-out">
+      <button
+        onClick={handleSignOut}
+        className="flex gap-2 p-3 ml-6 items-center mt-auto font-semibold border border-r-0 text-white hover:shadow-xl hover:border-r-0 hover:bg-red-600 transition-all duration-300 ease-in-out"
+      >
         Sign out
         <IoIosLogOut />
       </button>
