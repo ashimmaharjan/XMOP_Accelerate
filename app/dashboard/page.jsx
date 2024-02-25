@@ -74,20 +74,10 @@ const Dashboard = () => {
 
   return (
     <section>
-      <motion.h2
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{
-          type: "spring",
-          stiffness: 260,
-          damping: 20,
-          delay: 0.3,
-        }}
-        className="text-4xl text-gray-700 flex gap-2 font-semibold"
-      >
+      <h2 className="text-4xl text-gray-700 flex gap-2 font-semibold">
         Hi Ashim
         <FaHandPeace className="text-green-600" />
-      </motion.h2>
+      </h2>
       <span className="text-zinc-400">
         Here&apos;s what&apos;s happening with your deployments.
       </span>
@@ -123,7 +113,7 @@ const Dashboard = () => {
       </span>
 
       <div className="grid grid-cols-12 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-10 mt-5">
-        {deploymentArchitectures.map((architecture) => (
+        {deploymentArchitectures.map((architecture, index) => (
           <motion.div
             initial={{ scale: 0 }}
             whileInView={{ scale: 1 }}
@@ -131,7 +121,7 @@ const Dashboard = () => {
               type: "spring",
               stiffness: 260,
               damping: 20,
-              delay: 0.3,
+              delay: 0.1 + index * 0.1,
               duration: 300,
             }}
             key={architecture.id}

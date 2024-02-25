@@ -31,6 +31,7 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         console.log("User logged in successfully");
+        router.push("/dashboard");
         // Redirect the user to the dashboard or home page upon successful login
       } else {
         setErrorMessage(data.error);
@@ -67,7 +68,9 @@ const Login = () => {
           )}
 
           {errorMessage && (
-            <span className="text-red-500 text-sm">{errorMessage}</span>
+            <span className="text-red-600 text-sm font-semibold">
+              {errorMessage}
+            </span>
           )}
 
           <form onSubmit={handleLogin} className="mt-5 flex flex-col gap-3">

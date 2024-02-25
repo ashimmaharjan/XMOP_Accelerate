@@ -34,7 +34,7 @@ const Modal = ({ closeModal, architectureChosen }) => {
           <Divider />
 
           <div className="flex justify-end gap-2 px-5">
-            <button className="px-5 py-2 bg-sky-600 text-gray-100 hover:bg-sky-900 transition-all duration-300 ease-in-out">
+            <button className="px-5 py-2 bg-sky-600 text-gray-100 hover:bg-sky-700 hover:text-white transition-all duration-300 ease-in-out">
               Confirm
             </button>
             <button
