@@ -7,6 +7,7 @@ import { GrServices } from "react-icons/gr";
 import { TbSailboat2 } from "react-icons/tb";
 import { useState } from "react";
 import Modal from "../components/Modal";
+import { motion } from "framer-motion";
 
 const Dashboard = () => {
   const statistics = [
@@ -73,10 +74,20 @@ const Dashboard = () => {
 
   return (
     <section>
-      <h2 className="text-4xl text-gray-700 flex gap-2 font-semibold">
+      <motion.h2
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 260,
+          damping: 20,
+          delay: 0.3,
+        }}
+        className="text-4xl text-gray-700 flex gap-2 font-semibold"
+      >
         Hi Ashim
-        <FaHandPeace className="text-green-500" />
-      </h2>
+        <FaHandPeace className="text-green-600" />
+      </motion.h2>
       <span className="text-zinc-400">
         Here&apos;s what&apos;s happening with your deployments.
       </span>
@@ -89,7 +100,7 @@ const Dashboard = () => {
             className={`numberCard ${statistic.backgroundColor}`}
           >
             <div className="flex flex-col gap-2">
-              <h2 className="font-semibold text-lg text-gray-100">
+              <h2 className="font-semibold text-lg text-gray-50">
                 {statistic.label}
               </h2>
               <span className="text-4xl">{statistic.icon}</span>
@@ -100,7 +111,7 @@ const Dashboard = () => {
         ))}
       </div>
 
-      <div className="flex gap-5 mt-10 text-gray-700">
+      <div className="flex gap-3 mt-10 text-gray-700">
         <h2 className="font-semibold text-4xl">Deploy New</h2>
         <span className="text-3xl mt-1">
           <BsArrowRightSquare />
@@ -113,14 +124,27 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-12 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-10 mt-5">
         {deploymentArchitectures.map((architecture) => (
-          <button
+          <motion.div
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+              delay: 0.3,
+              duration: 300,
+            }}
             key={architecture.id}
             className="architectureCard"
-            onClick={() => toggleModal(architecture.name)}
           >
-            <span className="text-6xl">{architecture.icon}</span>
-            <p className="text-xl">{architecture.name}</p>
-          </button>
+            <button
+              className="architectureButton"
+              onClick={() => toggleModal(architecture.name)}
+            >
+              <span className="text-6xl">{architecture.icon}</span>
+              <p className="text-xl">{architecture.name}</p>
+            </button>
+          </motion.div>
         ))}
       </div>
 

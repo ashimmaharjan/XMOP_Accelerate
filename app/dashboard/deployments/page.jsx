@@ -1,6 +1,8 @@
-import { MdManageHistory } from "react-icons/md";
+import { FaCheckCircle } from "react-icons/fa";
+import { GrDeploy, GrInProgress } from "react-icons/gr";
+import { GoAlertFill } from "react-icons/go";
 
-const History = () => {
+const Deployments = () => {
   const deployments = [
     {
       id: 1,
@@ -47,10 +49,10 @@ const History = () => {
   ];
   return (
     <section>
-      <div className="flex gap-5 text-gray-700">
-        <h2 className="font-semibold text-4xl">Deployment History</h2>
+      <div className="flex gap-4 text-gray-700">
+        <h2 className="font-semibold text-4xl">Deployed Applications</h2>
         <span className="text-3xl mt-1">
-          <MdManageHistory />
+          <GrDeploy />
         </span>
       </div>
 
@@ -87,9 +89,9 @@ const History = () => {
               {deployment.architectureType}
             </span>
           </div>
-          <div className="col-span-1">
-            <span
-              className={`px-4 py-1 border-2 rounded-3xl ${
+          <div className="col-span-1 flex">
+            <div
+              className={`w-auto h-auto px-4 py-1 border-2 rounded-3xl flex items-center gap-[6px] ${
                 deployment.status === "Deployed"
                   ? "text-green-600 border-green-500"
                   : deployment.status === "In Progress"
@@ -97,8 +99,12 @@ const History = () => {
                   : "text-red-500 border-red-500"
               }`}
             >
-              {deployment.status}
-            </span>
+              {deployment.status === "Deployed" && <FaCheckCircle />}
+              {deployment.status === "In Progress" && <GrInProgress />}
+              {deployment.status === "Failed" && <GoAlertFill />}
+
+              <p>{deployment.status}</p>
+            </div>
           </div>
           <div className="col-span-1">{deployment.deploymentDate}</div>
         </div>
@@ -107,4 +113,4 @@ const History = () => {
   );
 };
 
-export default History;
+export default Deployments;

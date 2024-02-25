@@ -11,9 +11,13 @@
 }
 
 .architectureCard {
-  @apply col-span-12 md:col-span-1 p-10 flex flex-col justify-center items-center gap-8 border bg-sky-50 border-[#0284C7] text-gray-700 transition-all duration-300 ease-in-out shadow;
+  @apply w-auto h-auto col-span-12 md:col-span-1 gap-8;
 }
 
-.architectureCard:hover {
+.architectureButton {
+  @apply w-full h-full py-12 flex flex-col justify-center items-center border bg-sky-50 border-[#0284C7] text-gray-700 shadow transition-all duration-300 ease-in-out;
+}
+
+.architectureButton:hover {
   @apply cursor-pointer transform hover:scale-105 hover:bg-[#0284C7] hover:shadow-xl hover:text-gray-100 hover:border-none;
 }

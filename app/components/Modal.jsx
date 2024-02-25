@@ -1,5 +1,6 @@
 import { MdOutlineCancel } from "react-icons/md";
 import Divider from "./Divider";
+import { FiAlertOctagon } from "react-icons/fi";
 
 const Modal = ({ closeModal, architectureChosen }) => {
   return (
@@ -11,19 +12,22 @@ const Modal = ({ closeModal, architectureChosen }) => {
 
       <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
         <div className="w-[400px] outline-none border-none py-5 bg-sky-50 rounded shadow-xl">
-          <p className="flex justify-between items-center font-bold px-5">
-            <h3 className="text-xl text-gray-700">Confirmation</h3>
+          <div className="flex justify-between items-center font-bold px-5">
+            <div className="flex items-center gap-2 h-full text-xl text-gray-700">
+              <FiAlertOctagon className="text-2xl" />
+              <h3>Confirmation</h3>
+            </div>
 
-            <button className="text-3xl" onClick={closeModal}>
+            <button className="text-2xl" onClick={closeModal}>
               <MdOutlineCancel className="text-red-500" />
             </button>
-          </p>
+          </div>
 
           <Divider />
 
-          <p className="text-gray-600 ml-3">
-            Are you sure you would like to deploy{" "}
-            <span className="font-semibold">{architectureChosen}</span> &nbsp;
+          <p className="text-gray-600 px-6">
+            Are you sure you would like to deploy
+            <span className="font-semibold"> {architectureChosen} </span>
             architecture?
           </p>
 
@@ -34,7 +38,7 @@ const Modal = ({ closeModal, architectureChosen }) => {
               Confirm
             </button>
             <button
-              className="px-5 py-2 border text-gray-600 hover:bg-red-600 hover:text-gray-100 transition-all duration-300 ease-in-out"
+              className="px-5 py-2 border text-gray-600 hover:bg-gray-200 transition-all duration-300 ease-in-out"
               onClick={closeModal}
             >
               Cancel
