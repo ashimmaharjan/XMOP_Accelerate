@@ -8,6 +8,7 @@ import Lottie from "lottie-react";
 import handWaveAnimation from "../../../animations/handWave.json";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import Loader from "@/app/components/Loader";
 
 const Login = () => {
   const router = useRouter();
@@ -15,10 +16,12 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // Function to handle login
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:3001/api/login", {
         method: "POST",
@@ -42,12 +45,15 @@ const Login = () => {
       // Log and handle the error
       setErrorMessage(error);
       console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <main>
       <section className="flex justify-center items-center w-full h-screen">
+        {loading && <Loader />}
         <div className="w-auto h-auto relative bg-zinc-50 p-12 rounded-2xl border-2 border-gray-300 shadow-lg">
           <XmopsLogo />
 

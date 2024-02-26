@@ -7,6 +7,7 @@ import InputFields from "@/app/components/InputFields";
 import XmopsLogo from "@/app/components/XmopsLogo";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Loader from "@/app/components/Loader";
 
 const SignUp = () => {
   const [fullName, setFullName] = useState("");
@@ -14,12 +15,13 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   // Function to handle signup
   const handleSignUp = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     // Check if passwords match
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
@@ -47,12 +49,14 @@ const SignUp = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      // Log and handle the error
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <section className="flex justify-center items-center w-full h-screen">
+      {loading && <Loader />}
       <div className="w-auto h-auto relative bg-zinc-50 p-12 rounded-2xl border-2 border-gray-300 shadow-lg">
         <XmopsLogo />
 

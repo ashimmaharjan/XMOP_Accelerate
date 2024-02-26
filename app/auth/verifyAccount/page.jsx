@@ -6,10 +6,13 @@ import { MdEmail } from "react-icons/md";
 import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import Lottie from "lottie-react";
+import successAnimation from "../../../animations/successAnimation.json";
 
 const VerifyAccount = () => {
   const [confirmationCode, setConfirmationCode] = useState("");
   const [verifiedStatus, setVerifiedState] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
@@ -31,7 +34,7 @@ const VerifyAccount = () => {
         // Handle confirmation error, display error message to user
       }
     } catch (error) {
-      // Handle fetch error
+      setErrorMessage(error);
     }
   };
   return (
@@ -43,38 +46,68 @@ const VerifyAccount = () => {
           Verify your email
           <MdEmail className="text-[35px] text-sky-700" />
         </h2>
-        <span className="text-gray-400 text-sm">
-          Please enter the 6-digit verification code sent to your email.
-        </span>
+        {verifiedStatus ? (
+          <span className="text-gray-400 text-sm ml-1">
+            Email Verified successfully.
+          </span>
+        ) : (
+          <span className="text-gray-400 text-sm">
+            Please enter the 6-digit verification code sent to your email.
+          </span>
+        )}
 
-        <form
-          onSubmit={handleConfirmationCode}
-          className="mt-5 flex flex-col gap-3"
-        >
-          <InputFields
-            label="Verification Code*"
-            placeholder="Enter the verification code."
-            inputType="text"
-            value={confirmationCode}
-            onChange={(e) => setConfirmationCode(e.target.value)}
-          />
+        {errorMessage && (
+          <span className="text-red-500 text-sm font-semibold mt-3">
+            {errorMessage}
+          </span>
+        )}
 
-          <div className="flex items-center justify-between gap-3">
+        {verifiedStatus ? (
+          <div className="flex justify-center items-center flex-col gap-3">
+            <Lottie
+              animationData={successAnimation}
+              autoPlay
+              loop
+              className="w-28 h-28 object-scale-down mt-4"
+            ></Lottie>
+
             <Link
               href="/auth/login"
-              className="border text-center border-gray-200 w-1/2 py-3 text-gray-600 mt-3 rounded-3xl font-semibold hover:shadow transition-all duration-300 ease-in-out"
+              className="bg-sky-600 p-3 w-full text-center text-white mt-3 rounded-3xl shadow-md font-semibold hover:bg-sky-800 hover:shadow-xl transition-all duration-300 ease-in-out"
             >
-              Cancel
+              Login Now
             </Link>
-
-            <button
-              type="submit"
-              className="bg-sky-600 p-3 w-1/2 text-white mt-3 rounded-3xl shadow-md font-semibold hover:bg-sky-800 hover:shadow-xl transition-all duration-300 ease-in-out"
-            >
-              Verify
-            </button>
           </div>
-        </form>
+        ) : (
+          <form
+            onSubmit={handleConfirmationCode}
+            className="mt-5 flex flex-col gap-3"
+          >
+            <InputFields
+              label="Verification Code*"
+              placeholder="Enter the verification code."
+              inputType="text"
+              value={confirmationCode}
+              onChange={(e) => setConfirmationCode(e.target.value)}
+            />
+
+            <div className="flex items-center justify-between gap-3">
+              <Link
+                href="/auth/login"
+                className="border text-center border-gray-200 w-1/2 py-3 text-gray-600 mt-3 rounded-3xl font-semibold hover:shadow transition-all duration-300 ease-in-out"
+              >
+                Cancel
+              </Link>
+
+              <button
+                type="submit"
+                className="bg-sky-600 p-3 w-1/2 text-white mt-3 rounded-3xl shadow-md font-semibold hover:bg-sky-800 hover:shadow-xl transition-all duration-300 ease-in-out"
+              >
+                Verify
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </section>
   );
