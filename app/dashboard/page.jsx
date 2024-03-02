@@ -1,6 +1,5 @@
 "use client";
 
-import { FaHandPeace } from "react-icons/fa6";
 import { BsArrowRightSquare, BsBarChartLineFill } from "react-icons/bs";
 import { GiDjedPillar } from "react-icons/gi";
 import { GrServices } from "react-icons/gr";
@@ -8,6 +7,8 @@ import { TbSailboat2 } from "react-icons/tb";
 import { useState } from "react";
 import Modal from "../components/Modal";
 import { motion } from "framer-motion";
+import handPeaceSign from "./handPeaceSign.png";
+import Image from "next/image";
 
 const Dashboard = () => {
   const statistics = [
@@ -72,12 +73,25 @@ const Dashboard = () => {
     setShowModal(false);
   };
 
+  const fullName = sessionStorage.getItem("fullName");
+  const nameParts = fullName.split(" ");
+  const firstName = nameParts[0];
+
   return (
     <section>
-      <h2 className="text-4xl text-gray-700 flex gap-2 font-semibold">
-        Hi Ashim
-        <FaHandPeace className="text-green-600" />
-      </h2>
+      <div className="flex gap-2">
+        <h2 className="text-4xl text-gray-700 font-semibold">Hi {firstName}</h2>
+        <div className="-mt-[10px]">
+          <Image
+            src={handPeaceSign}
+            alt="hand-peace-sign"
+            width={30}
+            height={30}
+            quality={100}
+          ></Image>
+        </div>
+      </div>
+
       <span className="text-zinc-400">
         Here&apos;s what&apos;s happening with your deployments.
       </span>
@@ -141,7 +155,8 @@ const Dashboard = () => {
       {showModal && (
         <Modal
           closeModal={closeModal}
-          architectureChosen={chosenArchitecture}
+          message={"Are you sure you would like to deploy"}
+          focusSubject={chosenArchitecture + " architecture?"}
         />
       )}
     </section>

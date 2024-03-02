@@ -72,7 +72,7 @@ const Deployments = () => {
       {deployments.map((deployment) => (
         <div
           key={deployment.id}
-          className="grid grid-cols-5 gap-3 drop-shadow shadow-sm justify-between px-5 py-3 text-gray-700 border-b"
+          className="grid grid-cols-5 gap-3 shadow-sm justify-between px-5 py-3 text-gray-700 border-b"
         >
           <div className="col-span-1">{deployment.id}</div>
           <div className="col-span-1">{deployment.name}</div>

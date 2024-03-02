@@ -6,8 +6,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { GrDeploy } from "react-icons/gr";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import LogoXmops from "./xmops_logo.jpg";
+import Modal from "./Modal";
 
 const NavDrawer = () => {
   const [activeLink, setActiveLink] = useState("/dashboard");
@@ -34,22 +33,30 @@ const NavDrawer = () => {
 
   const router = useRouter();
 
+  // For Modal
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   const handleSignOut = () => {
+    // Remove ID token from localStorage
+    sessionStorage.removeItem("idToken");
     router.push("/");
   };
 
   return (
     <div className="w-full h-full bg-sky-600 shadow-inner flex flex-col py-8 overflow-hidden">
       {/* <h2 className="text-2xl font-bold text-white pl-6">XMOPS</h2> */}
-      <Image
-        src={LogoXmops}
-        width={100}
-        height={100}
-        alt="XMOPS Logo"
-        quality={100}
-        objectFit="contain"
-        className="mx-auto cursor-pointer"
-      />
+      <div className="pl-10 text-gray-50">
+        <h2 className="font-black text-4xl">XMOPS</h2>
+        <h3 className="italic uppercase text-xl -mt-2">Accelerate</h3>
+      </div>
       <div className="w-full h-[1px] bg-white mt-5"></div>
 
       <div className="flex flex-col gap-3 mt-5 pl-6">
@@ -71,12 +78,21 @@ const NavDrawer = () => {
       </div>
 
       <button
-        onClick={handleSignOut}
+        onClick={() => toggleModal()}
         className="flex gap-2 p-3 ml-6 items-center mt-auto font-semibold border border-r-0 text-white hover:shadow-xl hover:border-r-0 hover:bg-red-500 transition-all duration-300 ease-in-out"
       >
         Sign out
         <IoIosLogOut />
       </button>
+
+      {showModal && (
+        <Modal
+          closeModal={closeModal}
+          message={"Are you sure you would like to"}
+          focusSubject={" Sign out?"}
+          confirmAction={handleSignOut}
+        />
+      )}
     </div>
   );
 };

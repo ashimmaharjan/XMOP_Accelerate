@@ -3,9 +3,7 @@
 import Divider from "@/app/components/Divider";
 import Link from "next/link";
 import InputFields from "@/app/components/InputFields";
-import XmopsLogo from "@/app/components/XmopsLogo";
-import Lottie from "lottie-react";
-import handWaveAnimation from "../../../animations/handWave.json";
+
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Loader from "@/app/components/Loader";
@@ -17,6 +15,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [mfaCode, setMfaCode] = useState("");
+  const [showMfaInput, setShowMfaInput] = useState(false);
 
   // Function to handle login
   const handleLogin = async (e) => {
@@ -34,8 +34,16 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         console.log("User logged in successfully");
+        console.log(data.data);
+
+        // Store ID token in localStorage
+        sessionStorage.setItem("idToken", data.data.idToken);
+        sessionStorage.setItem("fullName", data.data.fullName);
+
         router.push("/dashboard");
-        // Redirect the user to the dashboard or home page upon successful login
+      } else if (response.status === 403 && data.error === "MFA_REQUIRED") {
+        // Show MFA input field if MFA is required
+        setShowMfaInput(true);
       } else {
         setErrorMessage(data.error);
         console.error("Error logging in:", data.error);
@@ -52,20 +60,10 @@ const Login = () => {
 
   return (
     <main>
-      <section className="flex justify-center items-center w-full h-screen">
+      <section className="flex justify-center items-center">
         {loading && <Loader />}
-        <div className="w-auto h-auto relative bg-zinc-50 p-12 rounded-2xl border-2 border-gray-300 shadow-lg">
-          <XmopsLogo />
-
-          <h2 className="font-bold text-4xl text-sky-700 flex items-center gap-1">
-            Welcome Back
-            <Lottie
-              animationData={handWaveAnimation}
-              autoPlay
-              loop
-              className="w-16 h-16 object-scale-down -mt-4"
-            ></Lottie>
-          </h2>
+        <div className="w-auto h-auto py-12 px-16">
+          <h2 className="font-bold text-4xl text-sky-700">Welcome Back !</h2>
 
           {!errorMessage && (
             <span className="text-gray-400 text-sm">
@@ -95,6 +93,16 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
+            {showMfaInput && ( // Show MFA input field if MFA is required
+              <InputFields
+                label="MFA Code:*"
+                placeholder="Enter your MFA code."
+                inputType="text"
+                value={mfaCode}
+                onChange={(e) => setMfaCode(e.target.value)}
+              />
+            )}
 
             <Link
               href=""

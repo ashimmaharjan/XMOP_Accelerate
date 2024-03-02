@@ -39,7 +39,7 @@ const VerifyAccount = () => {
   };
   return (
     <section className="flex justify-center items-center w-full h-screen">
-      <div className="w-auto h-auto relative bg-zinc-50 p-12 rounded-2xl border-2 border-gray-300 shadow-lg">
+      <div className="w-auto h-auto relative bg-zinc-50 p-12 rounded-2xl border-4 border-gray-300 shadow-lg">
         <XmopsLogo />
 
         <h2 className="font-bold tracking-wide text-4xl text-sky-700 flex items-center gap-3">
@@ -68,12 +68,12 @@ const VerifyAccount = () => {
               animationData={successAnimation}
               autoPlay
               loop
-              className="w-28 h-28 object-scale-down mt-4"
+              className="w-28 h-28 object-fit my-4"
             ></Lottie>
 
             <Link
-              href="/auth/login"
-              className="bg-sky-600 p-3 w-full text-center text-white mt-3 rounded-3xl shadow-md font-semibold hover:bg-sky-800 hover:shadow-xl transition-all duration-300 ease-in-out"
+              href="/"
+              className="bg-sky-600 p-3 w-full text-center text-white rounded-3xl shadow-md font-semibold hover:bg-sky-800 hover:shadow-xl transition-all duration-300 ease-in-out"
             >
               Login Now
             </Link>
@@ -93,7 +93,7 @@ const VerifyAccount = () => {
 
             <div className="flex items-center justify-between gap-3">
               <Link
-                href="/auth/login"
+                href="/"
                 className="border text-center border-gray-200 w-1/2 py-3 text-gray-600 mt-3 rounded-3xl font-semibold hover:shadow transition-all duration-300 ease-in-out"
               >
                 Cancel

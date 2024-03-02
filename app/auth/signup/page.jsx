@@ -49,6 +49,7 @@ const SignUp = () => {
       }
     } catch (error) {
       console.error("Error:", error);
+      setErrorMessage(error);
     } finally {
       setLoading(false);
     }
@@ -57,7 +58,7 @@ const SignUp = () => {
   return (
     <section className="flex justify-center items-center w-full h-screen">
       {loading && <Loader />}
-      <div className="w-auto h-auto relative bg-zinc-50 p-12 rounded-2xl border-2 border-gray-300 shadow-lg">
+      <div className="w-auto h-auto relative bg-zinc-50 p-12 rounded-2xl border-4 border-gray-300 shadow-lg">
         <XmopsLogo />
 
         <h2 className="font-bold tracking-wide text-4xl text-sky-700 flex items-center gap-3">
@@ -67,9 +68,7 @@ const SignUp = () => {
         <span className="text-gray-400 text-sm">Please fill out the form.</span>
 
         {errorMessage && (
-          <span className="text-red-600 text-sm font-semibold">
-            {errorMessage}
-          </span>
+          <p className="text-red-600 text-sm font-semibold">{errorMessage}</p>
         )}
 
         <form onSubmit={handleSignUp} className="mt-5 flex flex-col gap-3">
@@ -117,7 +116,7 @@ const SignUp = () => {
 
         <div className="flex">
           <span className="text-gray-500">Already have an account?</span>
-          <Link href="/auth/login" className="font-bold ml-1 text-sky-500">
+          <Link href="/" className="font-bold ml-1 text-sky-500">
             <p className="hover:transform hover:-translate-y-1 hover:underline transition-all duration-300 ease-in-out">
               Login.
             </p>
