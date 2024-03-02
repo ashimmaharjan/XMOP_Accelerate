@@ -4,11 +4,12 @@ import { BsArrowRightSquare, BsBarChartLineFill } from "react-icons/bs";
 import { GiDjedPillar } from "react-icons/gi";
 import { GrServices } from "react-icons/gr";
 import { TbSailboat2 } from "react-icons/tb";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import { motion } from "framer-motion";
 import handPeaceSign from "./handPeaceSign.png";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const statistics = [
@@ -73,9 +74,20 @@ const Dashboard = () => {
     setShowModal(false);
   };
 
-  const fullName = sessionStorage.getItem("fullName");
-  const nameParts = fullName.split(" ");
-  const firstName = nameParts[0];
+  const [firstName, setFirstName] = useState("");
+  const router = useRouter();
+  useEffect(() => {
+    const checkSession = () => {
+      const fullName = sessionStorage.getItem("fullName");
+      if (fullName) {
+        const nameParts = fullName.split(" ");
+        setFirstName(nameParts[0]);
+      } else {
+        router.push("/");
+      }
+    };
+    checkSession();
+  }, []);
 
   return (
     <section>
