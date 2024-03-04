@@ -76,6 +76,7 @@ const SignUp = () => {
             label="Full Name:*"
             placeholder="Enter you full name."
             inputType="text"
+            required="required"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
           />
@@ -84,6 +85,7 @@ const SignUp = () => {
             label="Email:*"
             placeholder="Enter you email."
             inputType="text"
+            required="required"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -92,6 +94,7 @@ const SignUp = () => {
             label="Password:*"
             placeholder="Enter a password."
             inputType="password"
+            required="required"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -100,6 +103,7 @@ const SignUp = () => {
             label="Confirm Password:*"
             placeholder="Re-enter your password."
             inputType="password"
+            required="required"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />

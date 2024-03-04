@@ -5,11 +5,12 @@ import { MdDashboard } from "react-icons/md";
 import { IoIosLogOut } from "react-icons/io";
 import { GrDeploy } from "react-icons/gr";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Modal from "./Modal";
+import { useRouter, usePathname } from "next/navigation";
+import ConfirmationModal from "./ConfirmationModal";
 
 const NavDrawer = () => {
-  const [activeLink, setActiveLink] = useState("/dashboard");
+  const pathname = usePathname();
+
   const NavLinks = [
     {
       id: 1,
@@ -65,7 +66,7 @@ const NavDrawer = () => {
             key={navLink.id}
             href={navLink.link}
             className={`text-lg flex items-center py-2 pl-5 w-full rounded-l-3xl gap-2 hover:translate-x-3 transition-all duration-300 ease-in-out ${
-              activeLink === navLink.link
+              pathname === navLink.link
                 ? "bg-white text-sky-600 font-semibold shadow"
                 : "text-white"
             }`}
@@ -86,7 +87,7 @@ const NavDrawer = () => {
       </button>
 
       {showModal && (
-        <Modal
+        <ConfirmationModal
           closeModal={closeModal}
           message={"Are you sure you would like to"}
           focusSubject={" Sign out?"}

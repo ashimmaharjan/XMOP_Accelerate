@@ -5,11 +5,14 @@ import { GiDjedPillar } from "react-icons/gi";
 import { GrServices } from "react-icons/gr";
 import { TbSailboat2 } from "react-icons/tb";
 import { useState, useEffect } from "react";
-import Modal from "../components/Modal";
+import FormModal from "../components/FormModal";
 import { motion } from "framer-motion";
 import handPeaceSign from "./handPeaceSign.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import LightsailForm from "../components/LightsailForm";
+import MonolithForm from "../components/MonolithForm";
+import MicroservicesForm from "../components/MicroservicesForm";
 
 const Dashboard = () => {
   const statistics = [
@@ -164,12 +167,34 @@ const Dashboard = () => {
         ))}
       </div>
 
-      {showModal && (
-        <Modal
+      {showModal && chosenArchitecture === "Monolith" && (
+        <FormModal
           closeModal={closeModal}
-          message={"Are you sure you would like to deploy"}
-          focusSubject={chosenArchitecture + " architecture?"}
-        />
+          title="Monolith"
+          icon={<GiDjedPillar />}
+        >
+          <MonolithForm closeModal={closeModal} />
+        </FormModal>
+      )}
+
+      {showModal && chosenArchitecture === "Microservice" && (
+        <FormModal
+          closeModal={closeModal}
+          title="Microservice"
+          icon={<GrServices />}
+        >
+          <MicroservicesForm closeModal={closeModal} />
+        </FormModal>
+      )}
+
+      {showModal && chosenArchitecture === "Lightsail" && (
+        <FormModal
+          closeModal={closeModal}
+          title="Lightsail"
+          icon={<TbSailboat2 />}
+        >
+          <LightsailForm closeModal={closeModal} />
+        </FormModal>
       )}
     </section>
   );

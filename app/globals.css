@@ -15,9 +15,9 @@
 }
 
 .architectureButton {
-  @apply w-full h-full py-12 flex flex-col justify-center items-center border bg-sky-50 border-[#0284C7] text-gray-700 shadow transition-all duration-300 ease-in-out;
+  @apply w-full h-full py-10 gap-3 flex flex-col justify-center items-center border bg-sky-50 border-[#0284C7] text-gray-700 shadow transition-all duration-300 ease-in-out;
 }
 
 .architectureButton:hover {
-  @apply cursor-pointer transform hover:scale-105 hover:bg-[#0284C7] hover:shadow-xl hover:text-gray-100 hover:border-none;
+  @apply cursor-pointer transform hover:scale-105 hover:bg-[#0284C7] hover:shadow-xl hover:text-gray-100 hover:border-none hover:font-semibold;
 }

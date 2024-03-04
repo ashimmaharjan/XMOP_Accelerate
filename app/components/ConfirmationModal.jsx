@@ -1,8 +1,14 @@
 import { MdOutlineCancel } from "react-icons/md";
 import Divider from "./Divider";
 import { FiAlertOctagon } from "react-icons/fi";
+import { FaCircleCheck } from "react-icons/fa6";
 
-const Modal = ({ closeModal, confirmAction, message, focusSubject }) => {
+const ConfirmationModal = ({
+  closeModal,
+  confirmAction,
+  message,
+  focusSubject,
+}) => {
   return (
     <section>
       <div
@@ -35,8 +41,9 @@ const Modal = ({ closeModal, confirmAction, message, focusSubject }) => {
           <div className="flex justify-end gap-2 px-5">
             <button
               onClick={confirmAction}
-              className="px-5 py-2 bg-sky-600 text-gray-100 hover:bg-sky-700 hover:text-white transition-all duration-300 ease-in-out"
+              className="flex items-center gap-1 px-5 py-2 bg-sky-600 text-gray-100 hover:bg-sky-700 hover:text-white transition-all duration-300 ease-in-out"
             >
+              <FaCircleCheck />
               Confirm
             </button>
             <button
@@ -52,4 +59,4 @@ const Modal = ({ closeModal, confirmAction, message, focusSubject }) => {
   );
 };
 
-export default Modal;
+export default ConfirmationModal;

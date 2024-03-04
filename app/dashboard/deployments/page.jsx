@@ -78,7 +78,7 @@ const Deployments = () => {
           <div className="col-span-1">{deployment.name}</div>
           <div className="col-span-1">
             <span
-              className={`px-4 py-1 text-gray-50 rounded-3xl ${
+              className={`px-4 py-1 text-gray-50 rounded-3xl shadow ${
                 deployment.architectureType === "Monolith"
                   ? "bg-[#00A5D5]"
                   : deployment.architectureType === "Microservice"
