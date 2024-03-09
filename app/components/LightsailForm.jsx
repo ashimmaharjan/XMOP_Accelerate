@@ -4,6 +4,7 @@ import { useState } from "react";
 import InputFields from "./InputFields";
 import { GrDeploy } from "react-icons/gr";
 import ConfirmationModal from "./ConfirmationModal";
+import ProcessingModal from "./ProcessingModal";
 import Divider from "./Divider";
 
 const LightsailForm = ({ closeModal }) => {
@@ -12,6 +13,9 @@ const LightsailForm = ({ closeModal }) => {
   const [blueprint, setBluePrint] = useState("");
   const [publicSSH, setPublicSSH] = useState("");
   const [instancePlan, setInstancePlan] = useState("");
+
+  const [outputIp, setOutputIp] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const awsRegions = [
     "us-east-1",
@@ -41,6 +45,14 @@ const LightsailForm = ({ closeModal }) => {
     setShowConfirmationModal(false);
   };
 
+  const [showProcessingModal, setShowProcessingModal] = useState(false);
+
+  const closeProcessingModal = () => {
+    setShowProcessingModal(false);
+    setErrorMessage("");
+    setOutputIp("");
+  };
+
   const deployLightsail = async (e) => {
     e.preventDefault();
     // Log the data before sending
@@ -49,27 +61,39 @@ const LightsailForm = ({ closeModal }) => {
       blueprint,
       instancePlan,
     });
+    setShowConfirmationModal(false);
+    setShowProcessingModal(true);
     try {
       const response = await fetch(
         "http://localhost:3001/api/deploy-lightsail",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ region, blueprint, instancePlan }),
         }
       );
+
       const data = await response.json();
+      console.log(data);
       if (response.ok) {
-        console.log("Lightsail deployed successfully");
+        if (data.success) {
+          console.log("Lightsail deployed successfully");
+          console.log("IP Address:", data.ip);
+          setOutputIp(data.ip);
+        } else {
+          console.error("Error deploying:", data.error);
+          setErrorMessage(data.error);
+        }
       } else {
         console.error("Error deploying:", data.error);
+        setErrorMessage(data.error);
       }
     } catch (error) {
-      console.error("Error deploying Lightsail:", error.message);
+      console.error("Error deploying Lightsail:", error.error);
+      setErrorMessage(error.error);
     }
   };
+
   return (
     <section>
       <form className="flex flex-col gap-3 px-10 pb-1">
@@ -80,6 +104,7 @@ const LightsailForm = ({ closeModal }) => {
           <select
             value={region}
             onChange={(e) => setRegion(e.target.value)}
+            required
             className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
           >
             <optgroup label="AWS Regions">
@@ -98,6 +123,7 @@ const LightsailForm = ({ closeModal }) => {
             Select Platform: *
           </label>
           <select
+            required
             value={platform}
             onChange={(e) => setPlatform(e.target.value)}
             className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
@@ -115,6 +141,7 @@ const LightsailForm = ({ closeModal }) => {
           </label>
           <select
             value={blueprint}
+            required
             onChange={(e) => setBluePrint(e.target.value)}
             className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
           >
@@ -138,6 +165,7 @@ const LightsailForm = ({ closeModal }) => {
             Select Instance Plan: *
           </label>
           <select
+            required
             value={instancePlan}
             onChange={(e) => setInstancePlan(e.target.value)}
             className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
@@ -172,6 +200,14 @@ const LightsailForm = ({ closeModal }) => {
             message={"Are you sure you would like to deploy"}
             focusSubject={"Lightsail architecture?"}
             confirmAction={deployLightsail}
+          />
+        )}
+
+        {showProcessingModal && (
+          <ProcessingModal
+            closeModal={closeProcessingModal}
+            deployedIP={outputIp}
+            errorMessage={errorMessage}
           />
         )}
       </div>
