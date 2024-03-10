@@ -6,6 +6,7 @@ import { GrDeploy } from "react-icons/gr";
 import ConfirmationModal from "./ConfirmationModal";
 import ProcessingModal from "./ProcessingModal";
 import Divider from "./Divider";
+import bundlesData from "../../jsonData/bundles.json";
 
 const LightsailForm = ({ closeModal }) => {
   const [region, setRegion] = useState("");
@@ -35,10 +36,25 @@ const LightsailForm = ({ closeModal }) => {
     "me-south-1",
   ];
 
+  const availableInstanceSizes = bundlesData.bundles;
+
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const toggleConfirmationModal = () => {
-    setShowConfirmationModal(!showConfirmationModal);
+    if (
+      !region ||
+      region.trim() === "" ||
+      !blueprint ||
+      blueprint.trim() === "" ||
+      !instancePlan ||
+      instancePlan.trim() === ""
+    ) {
+      setErrorMessage("Please fill out all required fields.");
+      setShowProcessingModal(true);
+      return;
+    } else {
+      setShowConfirmationModal(!showConfirmationModal);
+    }
   };
 
   const closeConfirmationModal = () => {
@@ -172,7 +188,11 @@ const LightsailForm = ({ closeModal }) => {
           >
             <optgroup label="Instance Plan">
               <option value="">Select Instance Plan</option>
-              <option value="small_3_2">Small</option>
+              {availableInstanceSizes.map((bundle, index) => (
+                <option key={index} value={bundle.bundleId}>
+                  {bundle.name} (${bundle.price} USD per month)
+                </option>
+              ))}
             </optgroup>
           </select>
         </div>

@@ -49,7 +49,7 @@ const ProcessingModal = ({ closeModal, deployedIP, errorMessage }) => {
               ></Lottie>
 
               <p className="text-gray-500 text-center">
-                Sorry! We have encountered an error.
+                Sorry! We have encountered an issue.
               </p>
               <p className="text-red-500 font-semibold mt-2 text-center">
                 {errorMessage}
@@ -77,7 +77,7 @@ const ProcessingModal = ({ closeModal, deployedIP, errorMessage }) => {
               <p className="text-gray-700 mt-5 text-center">
                 Deployed at: &nbsp;
                 <Link
-                  href={deployedIP}
+                  href={`http://${deployedIP}`}
                   target="_blank"
                   className="text-blue-500 underline"
                 >

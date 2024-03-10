@@ -1,0 +1,116 @@
+{
+    "bundles": [
+        {
+            "price": 3.5,
+            "cpuCount": 2,
+            "diskSizeInGb": 20,
+            "bundleId": "nano_3_2",
+            "instanceType": "nano",
+            "isActive": true,
+            "name": "Nano",
+            "power": 298,
+            "ramSizeInGb": 0.5,
+            "transferPerMonthInGb": 512,
+            "supportedPlatforms": [
+                "LINUX_UNIX"
+            ],
+            "publicIpv4AddressCount": 1
+        },
+        {
+            "price": 5.0,
+            "cpuCount": 2,
+            "diskSizeInGb": 40,
+            "bundleId": "micro_3_2",
+            "instanceType": "micro",
+            "isActive": true,
+            "name": "Micro",
+            "power": 500,
+            "ramSizeInGb": 1.0,
+            "transferPerMonthInGb": 1024,
+            "supportedPlatforms": [
+                "LINUX_UNIX"
+            ],
+            "publicIpv4AddressCount": 1
+        },
+        {
+            "price": 10.0,
+            "cpuCount": 2,
+            "diskSizeInGb": 60,
+            "bundleId": "small_3_2",
+            "instanceType": "small",
+            "isActive": true,
+            "name": "Small",
+            "power": 1000,
+            "ramSizeInGb": 2.0,
+            "transferPerMonthInGb": 1536,
+            "supportedPlatforms": [
+                "LINUX_UNIX"
+            ],
+            "publicIpv4AddressCount": 1
+        },
+        {
+            "price": 20.0,
+            "cpuCount": 2,
+            "diskSizeInGb": 80,
+            "bundleId": "medium_3_2",
+            "instanceType": "medium",
+            "isActive": true,
+            "name": "Medium",
+            "power": 2000,
+            "ramSizeInGb": 4.0,
+            "transferPerMonthInGb": 2048,
+            "supportedPlatforms": [
+                "LINUX_UNIX"
+            ],
+            "publicIpv4AddressCount": 1
+        },
+        {
+            "price": 40.0,
+            "cpuCount": 2,
+            "diskSizeInGb": 160,
+            "bundleId": "large_3_2",
+            "instanceType": "large",
+            "isActive": true,
+            "name": "Large",
+            "power": 3000,
+            "ramSizeInGb": 8.0,
+            "transferPerMonthInGb": 2560,
+            "supportedPlatforms": [
+                "LINUX_UNIX"
+            ],
+            "publicIpv4AddressCount": 1
+        },
+        {
+            "price": 80.0,
+            "cpuCount": 4,
+            "diskSizeInGb": 320,
+            "bundleId": "xlarge_3_2",
+            "instanceType": "xlarge",
+            "isActive": true,
+            "name": "Xlarge",
+            "power": 4000,
+            "ramSizeInGb": 16.0,
+            "transferPerMonthInGb": 3072,
+            "supportedPlatforms": [
+                "LINUX_UNIX"
+            ],
+            "publicIpv4AddressCount": 1
+        },
+        {
+            "price": 160.0,
+            "cpuCount": 8,
+            "diskSizeInGb": 640,
+            "bundleId": "2xlarge_3_2",
+            "instanceType": "2xlarge",
+            "isActive": true,
+            "name": "2Xlarge",
+            "power": 5000,
+            "ramSizeInGb": 32.0,
+            "transferPerMonthInGb": 3584,
+            "supportedPlatforms": [
+                "LINUX_UNIX"
+            ],
+            "publicIpv4AddressCount": 1
+        }
+    ]
+}
