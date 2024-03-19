@@ -2,8 +2,8 @@
 
 import { BsArrowRightSquare, BsBarChartLineFill } from "react-icons/bs";
 import { GiDjedPillar } from "react-icons/gi";
-import { GrServices } from "react-icons/gr";
 import { TbSailboat2 } from "react-icons/tb";
+import { Ri24HoursLine } from "react-icons/ri";
 import { useState, useEffect } from "react";
 import FormModal from "../components/FormModal";
 import { motion } from "framer-motion";
@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import LightsailForm from "../components/LightsailForm";
 import MonolithForm from "../components/MonolithForm";
-import MicroservicesForm from "../components/MicroservicesForm";
+import HighlyAvailableForm from "../components/HighlyAvailableForm";
 
 const Dashboard = () => {
   const statistics = [
@@ -32,8 +32,8 @@ const Dashboard = () => {
     },
     {
       id: 3,
-      label: "Microservice",
-      icon: <GrServices />,
+      label: "Highly Available",
+      icon: <Ri24HoursLine />,
       stats: "2",
       backgroundColor: "bg-[#00C2C9]",
     },
@@ -54,8 +54,8 @@ const Dashboard = () => {
     },
     {
       id: 2,
-      name: "Microservice",
-      icon: <GrServices />,
+      name: "Highly Available",
+      icon: <Ri24HoursLine />,
     },
     {
       id: 3,
@@ -177,13 +177,13 @@ const Dashboard = () => {
         </FormModal>
       )}
 
-      {showModal && chosenArchitecture === "Microservice" && (
+      {showModal && chosenArchitecture === "Highly Available" && (
         <FormModal
           closeModal={closeModal}
-          title="Microservice"
-          icon={<GrServices />}
+          title="Highly Available"
+          icon={<Ri24HoursLine />}
         >
-          <MicroservicesForm closeModal={closeModal} />
+          <HighlyAvailableForm closeModal={closeModal} />
         </FormModal>
       )}
 

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MdDashboard } from "react-icons/md";
 import { IoIosLogOut } from "react-icons/io";
+import { IoSettings } from "react-icons/io5";
 import { GrDeploy } from "react-icons/gr";
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -25,6 +26,13 @@ const NavDrawer = () => {
       link: "/dashboard/deployments",
       active: false,
       icon: <GrDeploy />,
+    },
+    {
+      id: 3,
+      label: "Settings",
+      link: "/dashboard/settings",
+      active: false,
+      icon: <IoSettings />,
     },
   ];
 
@@ -53,7 +61,6 @@ const NavDrawer = () => {
 
   return (
     <div className="w-full h-full bg-sky-600 shadow-inner flex flex-col py-8 overflow-hidden">
-      {/* <h2 className="text-2xl font-bold text-white pl-6">XMOPS</h2> */}
       <div className="pl-10 text-gray-50">
         <h2 className="font-black text-4xl">XMOPS</h2>
         <h3 className="italic uppercase text-xl -mt-2">Accelerate</h3>

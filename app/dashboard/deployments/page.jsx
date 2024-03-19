@@ -50,10 +50,10 @@ const Deployments = () => {
   return (
     <section>
       <div className="flex gap-4 text-gray-700">
-        <h2 className="font-semibold text-4xl">Deployed Applications</h2>
         <span className="text-3xl mt-1">
           <GrDeploy />
         </span>
+        <h2 className="font-semibold text-4xl">Deployed Applications</h2>
       </div>
 
       <span className="text-zinc-400">

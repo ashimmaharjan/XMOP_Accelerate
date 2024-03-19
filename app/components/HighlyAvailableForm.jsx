@@ -4,7 +4,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import Divider from "./Divider";
 import { GrDeploy } from "react-icons/gr";
 
-const MicroservicesForm = ({ closeModal }) => {
+const HighlyAvailableForm = ({ closeModal }) => {
   const [awsRegion, setAwsRegion] = useState("");
   const [minInstances, setMinInstances] = useState("");
   const [maxInstances, setMaxInstances] = useState("");
@@ -193,4 +193,4 @@ const MicroservicesForm = ({ closeModal }) => {
   );
 };
 
-export default MicroservicesForm;
+export default HighlyAvailableForm;
