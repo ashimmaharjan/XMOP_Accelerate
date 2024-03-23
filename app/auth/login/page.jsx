@@ -36,9 +36,10 @@ const Login = () => {
         console.log("User logged in successfully");
         console.log(data.data);
 
-        // Store ID token in localStorage
+        // Store ID token, Full Name and Email in localStorage
         sessionStorage.setItem("idToken", data.data.idToken);
         sessionStorage.setItem("fullName", data.data.fullName);
+        sessionStorage.setItem("userEmail", data.data.email);
 
         router.push("/dashboard");
       } else if (response.status === 403 && data.error === "MFA_REQUIRED") {

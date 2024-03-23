@@ -8,6 +8,9 @@ import ProcessingModal from "./ProcessingModal";
 import Divider from "./Divider";
 
 const LightsailForm = ({ closeModal }) => {
+  // Session user email data
+  const [userEmail, setUserEmail] = useState("");
+
   // User selected values and inputs
   const [instanceName, setInstanceName] = useState("");
   const [region, setRegion] = useState("");
@@ -22,10 +25,8 @@ const LightsailForm = ({ closeModal }) => {
   const [awsAvailabilityZones, setAwsAvailabilityZones] = useState([]);
   const [blueprintOptions, setBluePrintOptions] = useState([]);
   const [bundleOptions, setBundleOptions] = useState([]);
-
   const [linuxBlueprints, setLinuxBluePrints] = useState([]);
   const [windowsBlueprints, setWindowsBluePrints] = useState([]);
-
   const [linuxBundles, setLinuxBundles] = useState([]);
   const [windowsBundles, setWindowsBundles] = useState([]);
 
@@ -33,95 +34,91 @@ const LightsailForm = ({ closeModal }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    async function fetchRegions() {
-      try {
-        const response = await fetch("http://localhost:3001/api/regions");
-        const data = await response.json();
-        if (data.success) {
-          setAwsRegions(data.data.regions);
-          console.log("Backend fetched AWS regions:", awsRegions);
-        } else {
-          console.error("Error fetching regions:", data.error);
-        }
-      } catch (error) {
-        console.error("Error fetching regions:", error);
-      }
-    }
+    fetchData();
+    const fetchEmailFromStorage = () => {
+      const email = sessionStorage.getItem("userEmail");
+      console.log("Lightsail email user", email);
+      setUserEmail(email);
+    };
 
-    async function fetchBlueprints() {
-      try {
-        const response = await fetch("http://localhost:3001/api/blueprints");
-        const data = await response.json();
-        if (data.success) {
-          // Filter blueprints for Linux/Unix and create new array
-          const filteredLinuxBlueprints = data.data.blueprints.filter(
-            (blueprint) => blueprint.platform === "LINUX_UNIX"
-          );
-          setLinuxBluePrints(filteredLinuxBlueprints);
-
-          // Filter blueprints for Windows and create new array
-          const filteredWindowsBlueprints = data.data.blueprints.filter(
-            (blueprint) => blueprint.platform === "WINDOWS"
-          );
-          setWindowsBluePrints(filteredWindowsBlueprints);
-        } else {
-          console.error("Error fetching blueprints:", data.error);
-        }
-      } catch (error) {
-        console.error("Error fetching blueprints:", error);
-      }
-    }
-
-    async function fetchBundles() {
-      try {
-        const response = await fetch("http://localhost:3001/api/bundles");
-        const data = await response.json();
-        if (data.success) {
-          // Filter bundles for Linux/Unix and create new array
-          const filteredLinuxBundles = data.data.bundles.filter((bundle) =>
-            bundle.supportedPlatforms.includes("LINUX_UNIX")
-          );
-          console.log("Linux ko bundles:", filteredLinuxBundles);
-          setLinuxBundles(filteredLinuxBundles);
-
-          // Filter bundles for Windows and create new array
-          const filteredWindowsBundles = data.data.bundles.filter((bundle) =>
-            bundle.supportedPlatforms.includes("WINDOWS")
-          );
-          setWindowsBundles(filteredWindowsBundles);
-          console.log("Window ko bundles: ", filteredWindowsBundles);
-        } else {
-          console.error("Error fetching bundles:", data.error);
-        }
-      } catch (error) {
-        console.error("Error fetching bundles:", error);
-      }
-    }
-
-    fetchBlueprints();
-    fetchRegions();
-    fetchBundles();
+    fetchEmailFromStorage();
   }, []);
+
+  async function fetchData() {
+    try {
+      const regionsResponse = await fetch("http://localhost:3001/api/regions");
+      const regionsData = await regionsResponse.json();
+      if (regionsData.success) {
+        setAwsRegions(regionsData.data.regions);
+      } else {
+        console.error("Error fetching regions:", regionsData.error);
+      }
+
+      const blueprintsResponse = await fetch(
+        "http://localhost:3001/api/blueprints"
+      );
+      const blueprintsData = await blueprintsResponse.json();
+      if (blueprintsData.success) {
+        const filteredLinuxBlueprints = blueprintsData.data.blueprints.filter(
+          (blueprint) => blueprint.platform === "LINUX_UNIX"
+        );
+        setLinuxBluePrints(filteredLinuxBlueprints);
+
+        const filteredWindowsBlueprints = blueprintsData.data.blueprints.filter(
+          (blueprint) => blueprint.platform === "WINDOWS"
+        );
+        setWindowsBluePrints(filteredWindowsBlueprints);
+      } else {
+        console.error("Error fetching blueprints:", blueprintsData.error);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   const handleRegionChange = async (event) => {
     const region = event.target.value;
     setRegion(region);
+
     try {
-      const response = await fetch(
+      // Fetch availability zones
+      const availabilityZonesResponse = await fetch(
         `http://localhost:3001/api/availability-zones/${region}`
       );
-      const data = await response.json();
-      if (data.success) {
-        setAwsAvailabilityZones(data.data);
+      const availabilityZonesData = await availabilityZonesResponse.json();
+      if (availabilityZonesData.success) {
+        setAwsAvailabilityZones(availabilityZonesData.data);
         console.log(
           "Backend fetched availability zones:",
           awsAvailabilityZones
         );
       } else {
-        console.error("Error fetching availability zones:", data.error);
+        console.error(
+          "Error fetching availability zones:",
+          availabilityZonesData.error
+        );
+      }
+
+      // Fetch bundles
+      const bundlesResponse = await fetch(
+        `http://localhost:3001/api/available-bundles/${region}`
+      );
+      const bundlesData = await bundlesResponse.json();
+      if (bundlesData.success) {
+        const filteredLinuxBundles = bundlesData.data.bundles.filter((bundle) =>
+          bundle.supportedPlatforms.includes("LINUX_UNIX")
+        );
+        setLinuxBundles(filteredLinuxBundles);
+
+        const filteredWindowsBundles = bundlesData.data.bundles.filter(
+          (bundle) => bundle.supportedPlatforms.includes("WINDOWS")
+        );
+        setWindowsBundles(filteredWindowsBundles);
+      } else {
+        console.error("Error fetching bundles:", bundlesData.error);
       }
     } catch (error) {
-      console.error("Error fetching availability zones:", error);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -142,14 +139,18 @@ const LightsailForm = ({ closeModal }) => {
 
   const toggleConfirmationModal = () => {
     if (
+      !instanceName ||
+      instanceName.trim() === "" ||
       !region ||
       region.trim() === "" ||
+      !availabilityZone ||
+      availabilityZone.trim() === "" ||
       !blueprint ||
       blueprint.trim() === "" ||
       !instancePlan ||
       instancePlan.trim() === ""
     ) {
-      setErrorMessage("Please fill out all required fields.");
+      setErrorMessage("Please fill out all required fields marked by *.");
       setShowProcessingModal(true);
       return;
     } else {
@@ -173,9 +174,13 @@ const LightsailForm = ({ closeModal }) => {
     e.preventDefault();
     // Log the data before sending
     console.log("Data to be sent to the backend:", {
+      instanceName,
       region,
+      availabilityZone,
       blueprint,
+      publicSSH,
       instancePlan,
+      userEmail,
     });
     setShowConfirmationModal(false);
     setShowProcessingModal(true);
@@ -185,7 +190,15 @@ const LightsailForm = ({ closeModal }) => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ region, blueprint, instancePlan }),
+          body: JSON.stringify({
+            instanceName,
+            region,
+            availabilityZone,
+            blueprint,
+            publicSSH,
+            instancePlan,
+            userEmail,
+          }),
         }
       );
 
@@ -283,8 +296,12 @@ const LightsailForm = ({ closeModal }) => {
           >
             <option value="">Select blueprint</option>
             {blueprintOptions.map((blueprint, index) => (
-              <option key={index} value={blueprint.blueprintId}>
-                {blueprint.name}
+              <option
+                key={index}
+                value={blueprint.blueprintId}
+                className="capitalize"
+              >
+                {blueprint.blueprintId}
               </option>
             ))}
           </select>

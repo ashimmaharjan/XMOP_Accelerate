@@ -15,33 +15,51 @@ import MonolithForm from "../components/MonolithForm";
 import HighlyAvailableForm from "../components/HighlyAvailableForm";
 
 const Dashboard = () => {
+  // Architecture Type Based Data Arrays
+  const [monolithDeploymentsData, setMonolithDeploymentsData] = useState([]);
+  const [highlyAvailableDeploymentsData, setHighlyAvailableDeploymentsData] =
+    useState([]);
+  const [lightsailDeploymentsData, setLightsailDeploymentsData] = useState([]);
+
+  // For Modal
+  const [showModal, setShowModal] = useState(false);
+  const [chosenArchitecture, setChosenArchitecture] = useState("");
+
+  const [firstName, setFirstName] = useState("");
+
+  // Count total number of deployments
+  const totalDeployments =
+    monolithDeploymentsData.length +
+    highlyAvailableDeploymentsData.length +
+    lightsailDeploymentsData.length;
+
   const statistics = [
     {
       id: 1,
       label: "Total",
       icon: <BsBarChartLineFill />,
-      stats: "6",
+      stats: totalDeployments,
       backgroundColor: "bg-[#0284C7]",
     },
     {
       id: 2,
       label: "Monolith",
       icon: <GiDjedPillar />,
-      stats: "3",
+      stats: monolithDeploymentsData.length,
       backgroundColor: "bg-[#00A5D5]",
     },
     {
       id: 3,
       label: "Highly Available",
       icon: <Ri24HoursLine />,
-      stats: "2",
+      stats: highlyAvailableDeploymentsData.length,
       backgroundColor: "bg-[#00C2C9]",
     },
     {
       id: 4,
       label: "Lightsail",
       icon: <TbSailboat2 />,
-      stats: "1",
+      stats: lightsailDeploymentsData.length,
       backgroundColor: "bg-[#10DBAA]",
     },
   ];
@@ -64,10 +82,6 @@ const Dashboard = () => {
     },
   ];
 
-  // For Modal
-  const [showModal, setShowModal] = useState(false);
-  const [chosenArchitecture, setChosenArchitecture] = useState("");
-
   const toggleModal = (architectureChosen) => {
     setShowModal(!showModal);
     setChosenArchitecture(architectureChosen);
@@ -77,7 +91,6 @@ const Dashboard = () => {
     setShowModal(false);
   };
 
-  const [firstName, setFirstName] = useState("");
   const router = useRouter();
   useEffect(() => {
     const checkSession = () => {
@@ -90,7 +103,46 @@ const Dashboard = () => {
       }
     };
     checkSession();
+
+    fetchDeploymentData();
   }, []);
+
+  // Function to fetch deployment data from the backend API
+  const fetchDeploymentData = async () => {
+    try {
+      const email = sessionStorage.getItem("userEmail");
+      const deploymentsResponse = await fetch(
+        `http://localhost:3001/api/deployments?userEmail=${email}`
+      );
+      const userDeploymentData = await deploymentsResponse.json();
+      if (userDeploymentData.success) {
+        const deployments = userDeploymentData.data;
+
+        // Separate deployments data by architecture type
+        const monolithDeployments = deployments.filter(
+          (deployment) => deployment.architectureType === "Monolith"
+        );
+        const highlyAvailableDeployments = deployments.filter(
+          (deployment) => deployment.architectureType === "Highly Available"
+        );
+        const lightsailDeployments = deployments.filter(
+          (deployment) => deployment.architectureType === "Lightsail"
+        );
+
+        // Set state variables with separated deployments data
+        setMonolithDeploymentsData(monolithDeployments);
+        setHighlyAvailableDeploymentsData(highlyAvailableDeployments);
+        setLightsailDeploymentsData(lightsailDeployments);
+      } else {
+        console.error(
+          "Error fetching user deployment data:",
+          userDeploymentData.error
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching deployment data:", error);
+    }
+  };
 
   return (
     <section>
