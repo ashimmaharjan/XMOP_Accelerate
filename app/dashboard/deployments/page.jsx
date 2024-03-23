@@ -7,9 +7,11 @@ import { IoCalendarOutline } from "react-icons/io5";
 import Link from "next/link";
 import Lottie from "lottie-react";
 import noDataFoundAnimation from "../../../animations/noDataFoundAnimation.json";
+import dataLoadingAnimation from "../../../animations/dataLoadingAnimation.json";
 
 const Deployments = () => {
   const [deploymentsData, setDeploymentsData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchDeploymentData();
@@ -25,15 +27,17 @@ const Deployments = () => {
       const userDeploymentData = await deploymentsResponse.json();
       if (userDeploymentData.success) {
         setDeploymentsData(userDeploymentData.data);
-        // setDeploymentsData([]);
+        setLoading(false);
       } else {
         console.error(
           "Error fetching user deployment data:",
           userDeploymentData.error
         );
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error fetching deployment data:", error);
+      setLoading(false);
     }
   };
 
@@ -50,7 +54,19 @@ const Deployments = () => {
         Let&apos;s take a look at your recent deployments.
       </span>
 
-      {deploymentsData.length === 0 ? (
+      {loading ? (
+        <div className="flex flex-col gap-10 py-10 justify-center items-center mt-5 border-2 border-gray-300">
+          <p className="text-gray-500">
+            Beep boop beep... Retrieving data from the digital cosmos! 🤖🔍✨
+          </p>
+          <Lottie
+            animationData={dataLoadingAnimation}
+            autoPlay
+            loop
+            className="w-60 h-60"
+          />
+        </div>
+      ) : deploymentsData.length === 0 ? (
         <div className="flex flex-col gap-10 py-10 justify-center items-center mt-5 border-2 border-gray-300">
           <p className="text-red-500">
             Oops! Seems like you have not deployed any application yet.
