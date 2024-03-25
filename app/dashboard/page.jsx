@@ -89,6 +89,7 @@ const Dashboard = () => {
 
   const closeModal = () => {
     setShowModal(false);
+    fetchDeploymentData();
   };
 
   const router = useRouter();
@@ -103,7 +104,6 @@ const Dashboard = () => {
       }
     };
     checkSession();
-
     fetchDeploymentData();
   }, []);
 
