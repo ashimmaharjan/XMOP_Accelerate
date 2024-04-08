@@ -2,6 +2,7 @@
 import NavDrawer from "../components/NavDrawer";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import MobileNavigation from "../components/MobileNaviagtion";
 
 // Function to check if session is available
 const checkSession = () => {
@@ -21,13 +22,19 @@ export default function DashboardLayout({ children }) {
   }, []);
 
   return (
-    <section className="w-full h-screen overflow-hidden grid grid-cols-12">
-      <div className="hidden h-screen md:block md:col-span-3 lg:col-span-2">
-        <NavDrawer />
+    <section>
+      <div className="w-full h-screen overflow-hidden grid grid-cols-12">
+        <div className="hidden h-screen md:block md:col-span-3 lg:col-span-2">
+          <NavDrawer />
+        </div>
+
+        <div className="col-span-12 md:col-span-9 lg:col-span-10 bg-white pb-40 md:pb-0 p-10 overflow-x-hidden overflow-y-auto">
+          {children}
+        </div>
       </div>
 
-      <div className="col-span-12 md:col-span-9 lg:col-span-10 bg-white p-10 overflow-x-hidden overflow-y-auto">
-        {children}
+      <div className="block md:hidden sticky bottom-0 left-0">
+        <MobileNavigation />
       </div>
     </section>
   );

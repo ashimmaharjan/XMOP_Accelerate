@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .numberCard {
-  @apply col-span-12 md:col-span-1 h-auto p-5 text-white rounded-lg shadow-inner flex justify-between items-center transition-all duration-300 ease-in-out;
+  @apply col-span-12 md:col-span-1 h-auto p-5 text-white rounded-lg border border-gray-400 shadow flex justify-between items-center transition-all duration-300 ease-in-out;
 }
 
 .numberCard:hover {

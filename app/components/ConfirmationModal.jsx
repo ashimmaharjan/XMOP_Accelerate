@@ -12,11 +12,11 @@ const ConfirmationModal = ({
   return (
     <section>
       <div
-        className="w-screen h-screen bg-gray-900 opacity-90 fixed top-0 left-0 flex justify-center items-center"
+        className="w-screen h-screen bg-gray-900 opacity-90 fixed top-0 left-0 flex justify-center items-center z-40"
         onClick={closeModal}
       ></div>
 
-      <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+      <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center z-50">
         <div className="w-[400px] outline-none border-none py-5 bg-sky-50 rounded shadow-xl">
           <div className="flex justify-between items-center font-bold px-5">
             <div className="flex items-center gap-2 h-full text-xl text-gray-700">

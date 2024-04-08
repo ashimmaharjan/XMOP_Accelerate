@@ -10,7 +10,7 @@ const FormModal = ({ closeModal, children, title, icon }) => {
       ></div>
 
       <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center overflow-hidden">
-        <div className="w-auto md:min-w-[600px] h-auto max-h-[700px] outline-none border-none py-5 bg-sky-50 rounded shadow-xl overflow-hidden">
+        <div className="w-auto min-w-[400px] md:min-w-[600px] h-auto max-h-[700px] outline-none border-none py-5 bg-sky-50 rounded shadow-xl overflow-hidden">
           <div className="flex justify-between items-center font-bold px-5">
             <div className="flex items-center gap-2 h-full text-xl text-gray-700">
               <div className="text-2xl">{icon}</div>
