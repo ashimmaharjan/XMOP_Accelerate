@@ -8,7 +8,12 @@ import errorAnimation from "../../animations/errorAnimation.json";
 import Lottie from "lottie-react";
 import Link from "next/link";
 
-const ProcessingModal = ({ closeModal, deployedIP, errorMessage }) => {
+const ProcessingModal = ({
+  closeModal,
+  deployedIP,
+  errorMessage,
+  architecture,
+}) => {
   return (
     <section>
       <div
@@ -71,7 +76,7 @@ const ProcessingModal = ({ closeModal, deployedIP, errorMessage }) => {
               ></Lottie>
 
               <p className="text-gray-500 text-center">
-                Congratulations! Your Lightsail instance has been deployed
+                Congratulations! Your {architecture} instance has been deployed
                 successfully.
               </p>
               <p className="text-gray-700 mt-5 text-center">

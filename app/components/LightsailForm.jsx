@@ -136,6 +136,7 @@ const LightsailForm = ({ closeModal }) => {
   };
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showProcessingModal, setShowProcessingModal] = useState(false);
 
   const toggleConfirmationModal = () => {
     if (
@@ -161,8 +162,6 @@ const LightsailForm = ({ closeModal }) => {
   const closeConfirmationModal = () => {
     setShowConfirmationModal(false);
   };
-
-  const [showProcessingModal, setShowProcessingModal] = useState(false);
 
   const closeProcessingModal = () => {
     setShowProcessingModal(false);
@@ -367,6 +366,7 @@ const LightsailForm = ({ closeModal }) => {
             closeModal={closeProcessingModal}
             deployedIP={outputIp}
             errorMessage={errorMessage}
+            architecture={"Lightsail"}
           />
         )}
       </div>

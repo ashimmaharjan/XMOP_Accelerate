@@ -3,13 +3,18 @@
 import { useState, useEffect } from "react";
 import InputFields from "./InputFields";
 import ConfirmationModal from "./ConfirmationModal";
+import ProcessingModal from "./ProcessingModal";
 import Divider from "./Divider";
 import { GrDeploy } from "react-icons/gr";
 import { saveAs } from "file-saver";
 
 const MonolithForm = ({ closeModal }) => {
+  // Session user email data
+  const [userEmail, setUserEmail] = useState("");
+
   const [instanceName, setInstanceName] = useState("");
   const [region, setRegion] = useState("");
+  const [availabilityZone, setAvailabilityZone] = useState("");
   const [image, setImage] = useState("");
   const [instanceType, setInstanceType] = useState("");
   const [keyPair, setKeyPair] = useState("");
@@ -22,7 +27,7 @@ const MonolithForm = ({ closeModal }) => {
 
   //  Select Inputs data fetched from AWS
   const [awsRegions, setAwsRegions] = useState([]);
-  const [awsAMIs, setAwsAMIs] = useState([]);
+  const [awsAvailabilityZones, setAwsAvailabilityZones] = useState([]);
   const [awsInstanceTypes, setAWSInstanceTypes] = useState([]);
   const [existingKeys, setExistingKeys] = useState([]);
 
@@ -31,10 +36,21 @@ const MonolithForm = ({ closeModal }) => {
   const [newKeyName, setNewKeyName] = useState("");
   const [newKeyGenerated, setNewKeyGenerated] = useState(false);
 
+  const [outputIp, setOutputIp] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showProcessingModal, setShowProcessingModal] = useState(false);
 
   useEffect(() => {
     fetchData();
+
+    const fetchEmailFromStorage = () => {
+      const email = sessionStorage.getItem("userEmail");
+      setUserEmail(email);
+    };
+
+    fetchEmailFromStorage();
   }, []);
 
   async function fetchData() {
@@ -46,19 +62,6 @@ const MonolithForm = ({ closeModal }) => {
       } else {
         console.error("Error fetching regions:", regionsData.error);
       }
-
-      const instanceTypesResponse = await fetch(
-        "http://localhost:3001/api/instance-types"
-      );
-      const instanceTypesData = await instanceTypesResponse.json();
-      if (instanceTypesData.success) {
-        setAWSInstanceTypes(instanceTypesData.data);
-      } else {
-        console.error(
-          "Error fetching instance types:",
-          instanceTypesData.error
-        );
-      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -69,6 +72,25 @@ const MonolithForm = ({ closeModal }) => {
     setRegion(region);
 
     try {
+      // Fetch availability zones
+      const availabilityZonesResponse = await fetch(
+        `http://localhost:3001/api/availability-zones/${region}`
+      );
+      const availabilityZonesData = await availabilityZonesResponse.json();
+      if (availabilityZonesData.success) {
+        setAwsAvailabilityZones(availabilityZonesData.data);
+        console.log(
+          "Backend fetched availability zones:",
+          awsAvailabilityZones
+        );
+      } else {
+        console.error(
+          "Error fetching availability zones:",
+          availabilityZonesData.error
+        );
+      }
+
+      // Fetch available keys
       const availableKeyPairsResponse = await fetch(
         `http://localhost:3001/api/keypairs/${region}`
       );
@@ -80,6 +102,20 @@ const MonolithForm = ({ closeModal }) => {
         console.error(
           "Error fetching available keys:",
           availableKeyPairsData.error
+        );
+      }
+
+      // Fetch Instance Types
+      const instanceTypesResponse = await fetch(
+        `http://localhost:3001/api/instance-types/${region}`
+      );
+      const instanceTypesData = await instanceTypesResponse.json();
+      if (instanceTypesData.success) {
+        setAWSInstanceTypes(instanceTypesData.data);
+      } else {
+        console.error(
+          "Error fetching instance types:",
+          instanceTypesData.error
         );
       }
     } catch (error) {
@@ -136,11 +172,111 @@ const MonolithForm = ({ closeModal }) => {
   };
 
   const toggleConfirmationModal = () => {
-    setShowConfirmationModal(!showConfirmationModal);
+    if (
+      !instanceName ||
+      instanceName.trim() === "" ||
+      !region ||
+      region.trim() === "" ||
+      !availabilityZone ||
+      availabilityZone.trim() === "" ||
+      !image ||
+      image.trim() === "" ||
+      !instanceType ||
+      instanceType.trim() === "" ||
+      !keyPair ||
+      keyPair.trim() === "" ||
+      !storage ||
+      storage.trim() === "" ||
+      !dbType ||
+      dbType.trim() === "" ||
+      !phpVersion ||
+      phpVersion.trim() === "" ||
+      !webServer ||
+      webServer.trim() === ""
+    ) {
+      setErrorMessage("Please fill out all required fields marked by *.");
+      setShowProcessingModal(true);
+      return;
+    } else {
+      setShowConfirmationModal(!showConfirmationModal);
+    }
   };
 
   const closeConfirmationModal = () => {
     setShowConfirmationModal(false);
+  };
+
+  const closeProcessingModal = () => {
+    setShowProcessingModal(false);
+    setErrorMessage("");
+    setOutputIp("");
+  };
+
+  const deployMonolith = async (e) => {
+    e.preventDefault();
+
+    console.log("Data to be sent to the backend for monolith deployment:", {
+      instanceName,
+      region,
+      availabilityZone,
+      image,
+      instanceType,
+      keyPair,
+      sshAllowed,
+      httpAllowed,
+      storage,
+      dbType,
+      phpVersion,
+      webServer,
+      userEmail,
+    });
+
+    setShowConfirmationModal(false);
+    setShowProcessingModal(true);
+
+    try {
+      const response = await fetch(
+        "http://localhost:3001/api/deploy-monolith",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            instanceName,
+            region,
+            availabilityZone,
+            image,
+            instanceType,
+            keyPair,
+            sshAllowed,
+            httpAllowed,
+            storage,
+            dbType,
+            phpVersion,
+            webServer,
+            userEmail,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        if (data.success) {
+          console.log("Monolith deployed successfully");
+          console.log("IP Address:", data.ip);
+          setOutputIp(data.ip);
+        } else {
+          console.error("Error deploying:", data.error);
+          setErrorMessage(data.error);
+        }
+      } else {
+        console.error("Error deploying:", data.error);
+        setErrorMessage(data.error);
+      }
+    } catch (error) {
+      console.error("Error deploying Monolith:", error.error);
+      setErrorMessage(error.error);
+    }
   };
 
   return (
@@ -170,13 +306,39 @@ const MonolithForm = ({ closeModal }) => {
           </select>
         </div>
 
-        <InputFields
-          label="Image (OS): *"
-          placeholder="Enter AMI ID"
-          inputType="text"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-        />
+        <div className="flex flex-col gap-1">
+          <label className="text-gray-500 font-semibold">
+            Availability Zone: *
+          </label>
+          <select
+            value={availabilityZone}
+            onChange={(e) => setAvailabilityZone(e.target.value)}
+            required
+            className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
+          >
+            <option value="">Select availability zone</option>
+            {awsAvailabilityZones.map((availabilityZone, index) => (
+              <option key={index} value={availabilityZone}>
+                {availabilityZone}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="text-gray-500 font-semibold">Image (OS): *</label>
+          <select
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+            required
+            className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
+          >
+            <option value="">Select image</option>
+            <option value="ami-09ccb67fcbf1d625c">
+              Amazon Linux 2 Kernel 5.10 AMI 2.0.20240223.0 x86_64 HVM gp2
+            </option>
+          </select>
+        </div>
 
         <div className="flex flex-col gap-1">
           <label className="text-gray-500 font-semibold">
@@ -273,7 +435,7 @@ const MonolithForm = ({ closeModal }) => {
             >
               <option value="">Select Existing Key</option>
               {existingKeys.map((key, index) => (
-                <option key={index} value={key.KeyPairId}>
+                <option key={index} value={key.KeyName}>
                   {key.KeyName}
                 </option>
               ))}
@@ -324,29 +486,45 @@ const MonolithForm = ({ closeModal }) => {
           onChange={(e) => setStorage(e.target.value)}
         />
 
-        <InputFields
-          label="DB Type: *"
-          placeholder="Enter DB type"
-          inputType="text"
-          value={dbType}
-          onChange={(e) => setDbType(e.target.value)}
-        />
+        <div className="flex flex-col gap-1">
+          <label className="text-gray-500 font-semibold">DB Type: *</label>
+          <select
+            value={dbType}
+            onChange={(e) => setDbType(e.target.value)}
+            className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
+          >
+            <option value="">Select DB type</option>
+            <option value="mysql">MySQL</option>
+            <option value="mariadb-server">MariaDB</option>
+            <option value="postgresql">PostgreSQL</option>
+          </select>
+        </div>
 
-        <InputFields
-          label="PHP Version: *"
-          placeholder="Enter PHP version"
-          inputType="text"
-          value={phpVersion}
-          onChange={(e) => setPhpVersion(e.target.value)}
-        />
+        <div className="flex flex-col gap-1">
+          <label className="text-gray-500 font-semibold">PHP Version: *</label>
+          <select
+            value={phpVersion}
+            onChange={(e) => setPhpVersion(e.target.value)}
+            className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
+          >
+            <option value="">Select PHP version</option>
+            <option value="php8.0">PHP 8.0</option>
+          </select>
+        </div>
 
-        <InputFields
-          label="Web Server (Apache or Nginx) Version: *"
-          placeholder="Enter web server version"
-          inputType="text"
-          value={webServer}
-          onChange={(e) => setWebServer(e.target.value)}
-        />
+        <div className="flex flex-col gap-1">
+          <label className="text-gray-500 font-semibold">
+            Web Server (Apache or Nginx) Version: *
+          </label>
+          <select
+            value={webServer}
+            onChange={(e) => setWebServer(e.target.value)}
+            className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
+          >
+            <option value="">Select Web Server</option>
+            <option value="httpd">Apache HTTPD</option>
+          </select>
+        </div>
       </form>
       <Divider />
 
@@ -370,6 +548,16 @@ const MonolithForm = ({ closeModal }) => {
             closeModal={closeConfirmationModal}
             message={"Are you sure you would like to deploy"}
             focusSubject={"Monolith architecture?"}
+            confirmAction={deployMonolith}
+          />
+        )}
+
+        {showProcessingModal && (
+          <ProcessingModal
+            closeModal={closeProcessingModal}
+            deployedIP={outputIp}
+            errorMessage={errorMessage}
+            architecture="Monolith"
           />
         )}
       </div>

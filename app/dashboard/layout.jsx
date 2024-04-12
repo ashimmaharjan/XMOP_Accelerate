@@ -28,12 +28,12 @@ export default function DashboardLayout({ children }) {
           <NavDrawer />
         </div>
 
-        <div className="col-span-12 md:col-span-9 lg:col-span-10 bg-white pb-40 md:pb-0 p-10 overflow-x-hidden overflow-y-auto">
+        <div className="col-span-12 md:col-span-9 lg:col-span-10 bg-white md:pb-10 p-10 overflow-x-hidden overflow-y-auto">
           {children}
         </div>
       </div>
 
-      <div className="block md:hidden sticky bottom-0 left-0">
+      <div className="block overflow-x-hidden md:hidden sticky bottom-0 left-0">
         <MobileNavigation />
       </div>
     </section>
