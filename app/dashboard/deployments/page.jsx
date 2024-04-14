@@ -2,7 +2,7 @@
 
 import { GrDeploy, GrInProgress } from "react-icons/gr";
 import { useState, useEffect } from "react";
-import { SiAiohttp } from "react-icons/si";
+import { TbWorldWww } from "react-icons/tb";
 import { IoCalendarOutline } from "react-icons/io5";
 import { GiDjedPillar } from "react-icons/gi";
 import { TbSailboat2 } from "react-icons/tb";
@@ -29,7 +29,15 @@ const Deployments = () => {
       );
       const userDeploymentData = await deploymentsResponse.json();
       if (userDeploymentData.success) {
-        setDeploymentsData(userDeploymentData.data);
+        // Transform the createdAt property of each deployment object
+        const transformedDeploymentsData = userDeploymentData.data.map(
+          (deployment) => ({
+            ...deployment,
+            createdAt: formatDate(deployment.createdAt),
+          })
+        );
+
+        setDeploymentsData(transformedDeploymentsData);
         setLoading(false);
       } else {
         console.error(
@@ -42,6 +50,21 @@ const Deployments = () => {
       console.error("Error fetching deployment data:", error);
       setLoading(false);
     }
+  };
+
+  // Function to convert ISO date string to human-readable format
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    // Format the date into desired format (e.g., "April 12, 2024, 11:19 AM")
+    const options = {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    };
+    return date.toLocaleDateString("en-US", options);
   };
 
   return (
@@ -102,14 +125,18 @@ const Deployments = () => {
             {/* Table Data Loop */}
             {deploymentsData.map((deployment, index) => (
               <div
-                key={deployment.id}
+                key={index}
                 className="grid grid-cols-5 gap-3 shadow-sm justify-between px-5 py-3 text-gray-600 border-b"
               >
-                <div className="col-span-1 text-sm">{index + 1}</div>
-                <div className="col-span-1">{deployment.instanceName}</div>
-                <div className="col-span-1">
-                  <span
-                    className={`px-4 py-1 text-gray-50 rounded-3xl shadow ${
+                <div className="col-span-1 flex items-center text-sm">
+                  {index + 1}
+                </div>
+                <div className="col-span-1 flex items-center">
+                  {deployment.instanceName}
+                </div>
+                <div className="col-span-1 flex items-center">
+                  <div
+                    className={`px-4 py-2 text-gray-50 rounded-3xl gap-1 flex items-center shadow ${
                       deployment.architectureType === "Monolith"
                         ? "bg-[#00A5D5]"
                         : deployment.architectureType === "Highly Available"
@@ -117,15 +144,30 @@ const Deployments = () => {
                         : "bg-[#10DBAA]"
                     }`}
                   >
+                    {deployment.architectureType === "Monolith" ? (
+                      <p className="text-xl">
+                        <GiDjedPillar />
+                      </p>
+                    ) : deployment.architectureType === "Highly Available" ? (
+                      <p className="text-xl">
+                        <Ri24HoursLine />
+                      </p>
+                    ) : (
+                      <p className="text-xl">
+                        <TbSailboat2 />
+                      </p>
+                    )}
                     {deployment.architectureType}
-                  </span>
+                  </div>
                 </div>
                 <div className="col-span-1 flex text-blue-500">
                   <div className="w-auto h-10 px-4 py-1 border border-gray-500 rounded-md cursor-pointer flex items-center gap-[6px] bg-cyan-50 shadow-inner">
-                    <SiAiohttp />
-                    <Link target="_blank" href={`http://${deployment.ip}`}>
-                      {deployment.ip}
-                    </Link>
+                    <TbWorldWww className="text-2xl" />
+                    <div className="truncate max-w-[115px]">
+                      <Link target="_blank" href={`http://${deployment.ip}`}>
+                        {deployment.ip}
+                      </Link>
+                    </div>
                   </div>
                 </div>
                 <div className="col-span-1 flex items-center gap-2">
@@ -171,10 +213,12 @@ const Deployments = () => {
                 </p>
 
                 <div className="w-40 text-blue-500 h-10 px-4 py-1 border border-gray-500 rounded-md cursor-pointer flex items-center gap-[6px] bg-cyan-50 shadow-inner mt-3">
-                  <SiAiohttp />
-                  <Link target="_blank" href={`http://${deployment.ip}`}>
-                    {deployment.ip}
-                  </Link>
+                  <TbWorldWww className="text-2xl" />
+                  <div className="truncate max-w-[115px]">
+                    <Link target="_blank" href={`http://${deployment.ip}`}>
+                      {deployment.ip}
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-2 mt-3">
