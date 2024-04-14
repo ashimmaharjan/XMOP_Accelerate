@@ -1,49 +1,30 @@
-<!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️-->This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️-->XMOPS Accelerate
+XMOPS Accelerate stands as a transformative solution, revolutionizing the operational landscape for the XMOPS team by centralizing control and expediting tasks ranging from WordPress deployments to IAM role updates. By seamlessly integrating cutting-edge automation technologies with robust authentication mechanisms like Amazon Cognito, it not only ensures efficient infrastructure deployment but also fortifies security protocols. Through its user-friendly front-end interface, it empowers team members to navigate deployment options effortlessly, while its automated infrastructure provisioning, facilitated by Terraform scripts and AWS service integration, guarantees reliability and consistency. With anticipated outcomes including efficiency gains, enhanced transparency through meticulous logging and monitoring, and inherent scalability, XMOPS Accelerate emerges as a beacon of innovation, reshaping the paradigm of infrastructure deployment and management.
+Prerequisites to Run the Project:
 
+1. Node.js and npm: Ensure that Node.js and npm are installed on the user's PC. You can download and install them from the official Node.js website:[Node.jsDownloads](https://nodejs.org/en/download/).
+2. Project Dependencies: Once Node.js and npm are installed, the user can navigate to the project directory using a terminal or command prompt and run the following command to install project dependencies listed in the `package.json` file:
+   npm install
+   This command will read the `package.json` file and install all the dependencies listed under the `"dependencies"` section.
+   Packages Used in the Project:
+    autoprefixer@10.4.17
+    eslint@8.56.0
+    eslint-config-next@14.1.0
+    file-saver@^2.0.5
+    framer-motion@^11.0.5
+    lottie-react@^2.4.0
+    next@14.1.0
+    postcss@8.4.35
+    react@18.2.0
+    react-dom@18.2.0
+    react-icons@^5.0.1
+    tailwindcss@3.4.1
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#getting-started)
-
-## ➤ Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#or)
-
-# ➤ or
-yarn dev
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#or)
-
-# ➤ or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#learn-more)
-
-## ➤ Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#deploy-on-vercel)
-
-## ➤ Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+3. Running the Project: After installing the dependencies, the user can run the project using the provided npm scripts. For example:
+   To start the development server:
+   npm run dev
+   To build the project:
+   npm run build
+   To start the production server:
+   npm start
+   These steps, along with the list of packages used, should help the user set up and run the project on their PC.
