@@ -13,7 +13,6 @@ const HighlyAvailableForm = ({ closeModal }) => {
 
   const [instanceName, setInstanceName] = useState("");
   const [region, setRegion] = useState("");
-  const [availabilityZone, setAvailabilityZone] = useState("");
   const [minInstances, setMinInstances] = useState("");
   const [maxInstances, setMaxInstances] = useState("");
   const [ami, setAmi] = useState("");
@@ -27,7 +26,6 @@ const HighlyAvailableForm = ({ closeModal }) => {
 
   //  Select Inputs data fetched from AWS
   const [awsRegions, setAwsRegions] = useState([]);
-  const [awsAvailabilityZones, setAwsAvailabilityZones] = useState([]);
   const [awsInstanceTypes, setAWSInstanceTypes] = useState([
     {
       id: "t2.nano",
@@ -129,24 +127,6 @@ const HighlyAvailableForm = ({ closeModal }) => {
     setRegion(region);
 
     try {
-      // Fetch availability zones
-      const availabilityZonesResponse = await fetch(
-        `http://localhost:3001/api/availability-zones/${region}`
-      );
-      const availabilityZonesData = await availabilityZonesResponse.json();
-      if (availabilityZonesData.success) {
-        setAwsAvailabilityZones(availabilityZonesData.data);
-        console.log(
-          "Backend fetched availability zones:",
-          awsAvailabilityZones
-        );
-      } else {
-        console.error(
-          "Error fetching availability zones:",
-          availabilityZonesData.error
-        );
-      }
-
       // Fetch available keys
       const availableKeyPairsResponse = await fetch(
         `http://localhost:3001/api/keypairs/${region}`
@@ -220,8 +200,6 @@ const HighlyAvailableForm = ({ closeModal }) => {
       instanceName.trim() === "" ||
       !region ||
       region.trim() === "" ||
-      !availabilityZone ||
-      availabilityZone.trim() === "" ||
       !minInstances ||
       minInstances.trim() === "" ||
       !maxInstances ||
@@ -264,22 +242,24 @@ const HighlyAvailableForm = ({ closeModal }) => {
   const deployHighlyAvailable = async (e) => {
     e.preventDefault();
 
-    console.log("Data to be sent to the backend for monolith deployment:", {
-      instanceName,
-      region,
-      availabilityZone,
-      minInstances,
-      maxInstances,
-      ami,
-      instanceType,
-      keyPair,
-      storage,
-      dbEngine,
-      engineVersion,
-      environment,
-      rdsMultiAZ,
-      userEmail,
-    });
+    console.log(
+      "Data to be sent to the backend for highly available deployment:",
+      {
+        instanceName,
+        region,
+        minInstances,
+        maxInstances,
+        ami,
+        instanceType,
+        keyPair,
+        storage,
+        dbEngine,
+        engineVersion,
+        environment,
+        rdsMultiAZ,
+        userEmail,
+      }
+    );
 
     setShowConfirmationModal(false);
     setShowProcessingModal(true);
@@ -293,7 +273,6 @@ const HighlyAvailableForm = ({ closeModal }) => {
           body: JSON.stringify({
             instanceName,
             region,
-            availabilityZone,
             minInstances,
             maxInstances,
             ami,
@@ -352,25 +331,6 @@ const HighlyAvailableForm = ({ closeModal }) => {
             {awsRegions.map((region, index) => (
               <option key={index} value={region.name}>
                 {region.displayName}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <label className="text-gray-500 font-semibold">
-            Availability Zone: *
-          </label>
-          <select
-            value={availabilityZone}
-            onChange={(e) => setAvailabilityZone(e.target.value)}
-            required
-            className="rounded-md shadow-sm h-10 pl-2 border text-gray-600 border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
-          >
-            <option value="">Select availability zone</option>
-            {awsAvailabilityZones.map((availabilityZone, index) => (
-              <option key={index} value={availabilityZone}>
-                {availabilityZone}
               </option>
             ))}
           </select>
